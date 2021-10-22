@@ -8,7 +8,7 @@ pipeline {
   stages {
     stage('Cloning Git Repo') { 
       steps { 
-        git branch: 'master',
+        git branch: 'main',
             credentialsId: 'f0a87b6b-822e-4502-8051-47a170675cc3',
             url: 'https://github.com/eslam-gomaa/ruby-dockerize.git'
         // sh 'git clone https://github.com/eslam-gomaa/ruby-dockerize.git' 
