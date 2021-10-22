@@ -25,7 +25,7 @@ pipeline {
         script { 
           docker.withRegistry( registry, registryCredential ) { 
             docker.image("eslamgomaa/dockerizing-ruby-drkiq").push("${env.BUILD_NUMBER}")
-            docker.image("eslamgomaa/dockerizing-ruby-drkiq").push("last")
+            docker.image("eslamgomaa/dockerizing-ruby-drkiq").push("latest")
             }
           }   
       }
