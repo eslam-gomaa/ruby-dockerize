@@ -4,7 +4,7 @@ pipeline {
     registryCredential = 'docker_hub_id' 
     dockerImage = '' 
   }
-  agent ubuntu-vm
+  agent label debian-11-vm
   stages {
     stage('Cloning Git Repo') { 
       steps { 
@@ -18,6 +18,12 @@ pipeline {
       steps {
         echo 'Build the app locally & run tests'
         sh  "docker build -t eslamgomaa/dockerizing-ruby-drkiq:latest --cache-from=eslamgomaa/dockerizing-ruby-drkiq:latest -f Dockerfile.production ."
+      }
+    }
+    stage('Push') {
+      steps {
+        echo 'Push the docker image to docker hub'
+        sh  ""
       }
     }
 
