@@ -8,7 +8,10 @@ pipeline {
   stages {
     stage('Cloning Git Repo') { 
       steps { 
-          sh 'git clone https://github.com/eslam-gomaa/ruby-dockerize.git' 
+        git branch: 'master',
+            credentialsId: 'f0a87b6b-822e-4502-8051-47a170675cc3',
+            url: 'https://github.com/eslam-gomaa/ruby-dockerize.git'
+        // sh 'git clone https://github.com/eslam-gomaa/ruby-dockerize.git' 
       }
     } 
     stage('Build') {
@@ -16,11 +19,10 @@ pipeline {
         echo 'Build the app locally & run tests'
         pwsh(script: """
              cd ruby-dockerize
-             DOCKER_USERNAME=eslamgomaa
+             export DOCKER_USERNAME=eslamgomaa
              docker build -t $DOCKER_USERNAME/dockerizing-ruby-drkiq:latest \
                 --cache-from=$DOCKER_USERNAME/dockerizing-ruby-drkiq:latest \
                 -f Dockerfile.production .
-
         """)
       }
     }
