@@ -13,7 +13,7 @@ pipeline {
             url: 'https://github.com/eslam-gomaa/ruby-dockerize.git'
         // sh 'git clone https://github.com/eslam-gomaa/ruby-dockerize.git' 
       }
-    } 
+    }
     stage('Build') {
       steps {
         echo 'Build the app locally & run tests'
@@ -24,12 +24,9 @@ pipeline {
       steps {
         script { 
           docker.withRegistry( registry, registryCredential ) { 
-            docker.image("eslamgomaa/dockerizing-ruby-drkiq").push("latest")
+            docker.image("eslamgomaa/dockerizing-ruby-drkiq").push("${env.BUILD_NUMBER}")
             }
           }   
-        // docker.withRegistry('eslamgomaa/task', 'docker_hub_id') {
-        //     docker.image("eslamgomaa/dockerizing-ruby-drkiq").push("${env.BUILD_NUMBER}")
-        // }
       }
     }
   }
