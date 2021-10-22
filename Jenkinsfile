@@ -21,12 +21,9 @@ pipeline {
       }
     }
     stage('Push') {
-      steps {
-        echo 'Push the docker image to docker hub'
         // docker.push("")
         docker.withRegistry('eslamgomaa/task', 'docker_hub_id') {
             docker.image("eslamgomaa/dockerizing-ruby-drkiq").push("${env.BUILD_NUMBER}")
-        }
       }
     }
   }
