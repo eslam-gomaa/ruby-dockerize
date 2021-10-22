@@ -22,11 +22,9 @@ pipeline {
     }
     stage('Push') {
       steps {
-        script { 
-          docker.withRegistry( registry, registryCredential ) { 
-            docker.image("eslamgomaa/dockerizing-ruby-drkiq").push("latest")
-            }
-          }   
+        docker.withRegistry( registry, registryCredential ) { 
+          docker.image("eslamgomaa/dockerizing-ruby-drkiq").push("latest")
+          }
         // docker.withRegistry('eslamgomaa/task', 'docker_hub_id') {
         //     docker.image("eslamgomaa/dockerizing-ruby-drkiq").push("${env.BUILD_NUMBER}")
         // }
