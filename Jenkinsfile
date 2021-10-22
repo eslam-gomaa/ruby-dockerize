@@ -23,7 +23,7 @@ pipeline {
     stage('Push') {
       steps {
         script { 
-          docker.withRegistry( '', registryCredential ) { 
+          docker.withRegistry( registry, registryCredential ) { 
             docker.image("eslamgomaa/dockerizing-ruby-drkiq").push("latest")
             }
           }   
