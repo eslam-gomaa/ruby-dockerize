@@ -4,7 +4,7 @@ pipeline {
     registryCredential = 'docker_hub_id' 
     dockerImage = '' 
   }
-  agent any
+  agent ubuntu-vm
   stages {
     stage('Cloning Git Repo') { 
       steps { 
