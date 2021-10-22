@@ -19,9 +19,8 @@ pipeline {
         echo 'Build the app locally & run tests'
         pwsh(script: """
              cd ruby-dockerize
-             export DOCKER_USERNAME=eslamgomaa
-             docker build -t $DOCKER_USERNAME/dockerizing-ruby-drkiq:latest \
-                --cache-from=$DOCKER_USERNAME/dockerizing-ruby-drkiq:latest \
+             docker build -t eslamgomaa/dockerizing-ruby-drkiq:latest \
+                --cache-from=eslamgomaa/dockerizing-ruby-drkiq:latest \
                 -f Dockerfile.production .
         """)
       }
