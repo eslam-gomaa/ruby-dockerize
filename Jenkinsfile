@@ -4,7 +4,7 @@ pipeline {
     registryCredential = 'docker_hub_id' 
     dockerImage = '' 
   }
-  agent label debian-11-vm
+  agent { node { label 'debian-11-vm' } }
   stages {
     stage('Cloning Git Repo') { 
       steps { 
