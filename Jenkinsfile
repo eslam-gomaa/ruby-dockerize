@@ -17,27 +17,17 @@ pipeline {
     stage('Build') {
       steps {
         echo 'Build the app locally & run tests'
-        sh  "docker build -t eslamgomaa/dockerizing-ruby-drkiq:latest --cache-from=eslamgomaa/dockerizing-ruby-drkiq:latest -f Dockerfile.production ."
+        sh  "docker build -t eslamgomaa/dockerizing-ruby-drkiq:${env.BUILD_NUMBER} -f Dockerfile.production ."
       }
     }
     stage('Push') {
       steps {
         echo 'Push the docker image to docker hub'
-        sh  ""
+        // docker.push("")
+        docker.withRegistry('eslamgomaa/task', 'docker_hub_id') {
+            docker.image("eslamgomaa/dockerizing-ruby-drkiq").push("${env.BUILD_NUMBER}")
+        }
       }
     }
-
-    // stage('Docker Build') {
-    //     steps {
-    //       pwsh(script: 'docker images -a')
-    //       pwsh(script: """
-    //           cd azure-vote/
-    //           docker images -a
-    //           docker build -t jenkins-pipeline .
-    //           docker images -a
-    //           cd ..
-    //       """)
-    //     }
-    // }
   }
 }
