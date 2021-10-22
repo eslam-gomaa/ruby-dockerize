@@ -8,7 +8,7 @@ pipeline {
   stages {
     stage('Cloning Git Repo') { 
       steps { 
-          git 'https://github.com/eslam-gomaa/ruby-dockerize.git' 
+          sh 'git clone https://github.com/eslam-gomaa/ruby-dockerize.git' 
       }
     } 
     stage('Build') {
