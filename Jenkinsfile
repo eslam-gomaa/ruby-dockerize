@@ -17,14 +17,7 @@ pipeline {
     stage('Build') {
       steps {
         echo 'Build the app locally & run tests'
-        pwsh(script: """
-            pwd
-            ls -lh
-            //  cd ruby-dockerize
-            //  docker build -t eslamgomaa/dockerizing-ruby-drkiq:latest \
-            //     --cache-from=eslamgomaa/dockerizing-ruby-drkiq:latest \
-            //     -f Dockerfile.production .
-        """)
+        sh 'pwd && ls -lh'
       }
     }
 
