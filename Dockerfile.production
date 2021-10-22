@@ -1,5 +1,5 @@
 # Dockerfile.production
-FROM registry.semaphoreci.com/ruby:2.7
+FROM ruby:2.7.2
 
 ENV INSTALL_PATH /opt/app
 RUN mkdir -p $INSTALL_PATH
