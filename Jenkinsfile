@@ -1,6 +1,6 @@
 pipeline {
   environment { 
-    registry = "https://hub.docker.com/repository/docker/eslamgomaa/task" 
+    registry = "registry.hub.docker.com/eslamgomaa/task" 
     registryCredential = 'docker_hub_id' 
     dockerImage = '' 
   }
