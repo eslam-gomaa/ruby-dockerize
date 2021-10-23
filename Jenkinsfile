@@ -19,9 +19,10 @@ pipeline {
             image: docker:18.03-git
             command: ["sleep"]
             args: ["100000"]
+            tty: true
             volumeMounts:
-            - name: workspace
-              mountPath: /workspace
+            // - name: workspace
+              // mountPath: /workspace
             - name: docker-socket
               mountPath: /var/run/docker.sock
             workingDir: /workspace
@@ -29,20 +30,20 @@ pipeline {
             image: vfarcic/kubectl
             command: ["sleep"]
             args: ["100000"]
-            volumeMounts:
-            - name: workspace
-              mountPath: /workspace
+            tty: true
+            // volumeMounts:
+            // - name: workspace
+              // mountPath: /workspace
             workingDir: /workspace
           volumes:
           - name: docker-socket
             hostPath:
               path: /var/run/docker.sock
               type: Socket
-          - name: workspace
-            emptyDir: {}
+          // - name: workspace
+            // emptyDir: {}
         '''
     }
-    node { label: 'rails' }
   }
   stages {
     stage('Cloning Git Repo') { 
