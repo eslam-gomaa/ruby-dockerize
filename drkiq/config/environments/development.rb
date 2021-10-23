@@ -9,6 +9,8 @@ Rails.application.configure do
   config.cache_classes = false
   
   config.hosts << "drkiq"
+  config.hosts << "staging-app.demo.devops-caffe.com"
+  config.hosts << "prod-app.demo.devops-caffe.com"
 
   # Do not eager load code on boot.
   config.eager_load = false
