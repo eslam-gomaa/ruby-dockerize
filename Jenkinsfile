@@ -6,7 +6,7 @@ pipeline {
   }
   // agent { node { label 'debian-11-vm' } }
     agent {
-    kubernetes {
+    kubernetes-staging {
       yaml '''
       apiVersion: v1
       kind: Pod
