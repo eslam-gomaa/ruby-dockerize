@@ -46,7 +46,6 @@ pipeline {
         git branch: 'main',
             credentialsId: 'f0a87b6b-822e-4502-8051-47a170675cc3',
             url: 'https://github.com/eslam-gomaa/ruby-dockerize.git'
-        sh 'hostname'
         sh 'pwd'
         sh 'ls -lh'
       }
@@ -68,6 +67,17 @@ pipeline {
               docker.image("eslamgomaa/dockerizing-ruby-drkiq:${env.BUILD_NUMBER}").push("${env.BUILD_NUMBER}")
               docker.image("eslamgomaa/dockerizing-ruby-drkiq:${env.BUILD_NUMBER}").push("latest")
             }
+          }
+        }
+      }
+    }
+    stage('Deploy on Staging namespace') {
+      steps {
+        container('kubectl') {
+          script { 
+            sh 'ls -lh'
+            sh 'pwd'
+            sh 'ls k8s-app/staging/'
           }
         }
       }
