@@ -1,0 +1,215 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sample-rails-app
+  labels:
+    app: rails-app
+    tier: frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rails-app
+      tier: frontend
+  template:
+    metadata:
+      labels:
+        app: rails-app
+        tier: frontend 
+    spec:
+      initContainers:
+      - name: wait-postgresql
+        image: busybox
+        command: ['sh', '-c', 'until nslookup postgresql; do echo waiting for postgresql; sleep 2; done;']
+        
+      - name: copy-data
+        image: eslamgomaa/dockerizing-ruby-drkiq:33
+        workingDir: /opt/app-data
+        volumeMounts:
+            - name: "rails-data"
+              mountPath: /opt/app-data
+        command: [ "/bin/bash", "-c" ]
+        args:
+          - 
+           echo "Copying container data to /opt/app-data ...";
+           cp -r /opt/app/* /opt/app-data/;
+           ls /opt/app-data/;
+           echo "Data copied successfully.";
+
+      - name: init-db
+        image: eslamgomaa/dockerizing-ruby-drkiq:33
+        workingDir: /opt/app-data
+        volumeMounts:
+            - name: "rails-data"
+              mountPath: /opt/app-data
+        command: [ "/bin/bash", "-c" ]
+        args:
+          - 
+           echo "Create DBs";
+           rake db:create test;
+           rake db:create development || echo "development DB already exists"; 
+           rails webpacker:install;
+           rails assets:precompile;
+
+        env:
+            - name: USER_ID
+              valueFrom:
+                configMapKeyRef:
+                  name: sample-rails-app
+                  key: USER_ID
+
+            - name: GROUP_ID
+              valueFrom:
+                configMapKeyRef:
+                  name: sample-rails-app
+                  key: GROUP_ID
+
+            - name: SECRET_TOKEN
+              valueFrom:
+                configMapKeyRef:
+                  name: sample-rails-app
+                  key: SECRET_TOKEN
+
+            - name: WORKER_PROCESSES
+              valueFrom:
+                configMapKeyRef:
+                  name: sample-rails-app
+                  key: WORKER_PROCESSES
+
+            - name: LISTEN_ON
+              valueFrom:
+                configMapKeyRef:
+                  name: sample-rails-app
+                  key: LISTEN_ON
+
+            - name: DATABASE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: sample-rails-app
+                  key: DATABASE_URL
+            
+            - name: CACHE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: sample-rails-app
+                  key: CACHE_URL
+
+            - name: JOB_WORKER_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: sample-rails-app
+                  key: JOB_WORKER_URL
+      containers:
+      - name: drkiq
+        image: eslamgomaa/dockerizing-ruby-drkiq:33
+        imagePullPolicy: Always
+        ports:
+            - containerPort: 8010
+        # command: ["/bin/sleep", "3600"]
+        workingDir: /opt/app-data
+        env:
+            - name: USER_ID
+              valueFrom:
+                configMapKeyRef:
+                  name: sample-rails-app
+                  key: USER_ID
+
+            - name: GROUP_ID
+              valueFrom:
+                configMapKeyRef:
+                  name: sample-rails-app
+                  key: GROUP_ID
+
+            - name: SECRET_TOKEN
+              valueFrom:
+                configMapKeyRef:
+                  name: sample-rails-app
+                  key: SECRET_TOKEN
+
+            - name: WORKER_PROCESSES
+              valueFrom:
+                configMapKeyRef:
+                  name: sample-rails-app
+                  key: WORKER_PROCESSES
+
+            - name: LISTEN_ON
+              valueFrom:
+                configMapKeyRef:
+                  name: sample-rails-app
+                  key: LISTEN_ON
+
+            - name: DATABASE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: sample-rails-app
+                  key: DATABASE_URL
+            
+            - name: CACHE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: sample-rails-app
+                  key: CACHE_URL
+
+            - name: JOB_WORKER_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: sample-rails-app
+                  key: JOB_WORKER_URL
+
+        volumeMounts:
+            - name: "rails-data"
+              mountPath: /opt/app-data
+      volumes:
+        - name: rails-data
+          # emptyDir: {}
+          persistentVolumeClaim:
+            claimName: claim-rails
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: claim-rails
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 2Gi
+  storageClassName: nfs-client
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: sample-rails-app
+spec:
+  selector:
+    app: rails-app
+    tier: frontend
+  ports:
+    - protocol: TCP
+      port: 8010 # service port
+      targetPort: 8010 # Pod port
+
+---
+
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: sample-rails-app
+  # namespace: staging
+  annotations:
+    kubernetes.io/ingress.class: "haproxy"
+spec:
+  rules:
+  - host: staging-app.demo.devops-caffe.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: sample-rails-app
+          servicePort: 8010
