@@ -43,13 +43,24 @@ pipeline {
     }
   }
   stages {
-    stage('Cloning Git Repo') {
-      steps {
-        echo 'Build the app locally & run tests'
-        sh  "docker build -t eslamgomaa/dockerizing-ruby-drkiq:${env.BUILD_NUMBER} --cache-from=eslamgomaa/dockerizing-ruby-drkiq:latest -f Dockerfile.production ."
+    
+    container('docker') {
+      stage('Cloning Git Repo') { 
+        steps { 
+          git branch: 'main',
+              credentialsId: 'f0a87b6b-822e-4502-8051-47a170675cc3',
+              url: 'https://github.com/eslam-gomaa/ruby-dockerize.git'
+          // sh 'git clone https://github.com/eslam-gomaa/ruby-dockerize.git' 
+        }
+      }
+      stage('Build') {
+        steps {
+          echo 'Build the app locally & run tests'
+          sh  "docker build -t eslamgomaa/dockerizing-ruby-drkiq:${env.BUILD_NUMBER} --cache-from=eslamgomaa/dockerizing-ruby-drkiq:latest -f Dockerfile.production ."
+        }
       }
     }
-    stage('Push to Docker Hub') {
+    stage('Push') {
       steps {
         container('docker') {
           script { 
