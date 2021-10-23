@@ -17,7 +17,7 @@ pipeline {
     stage('Build') {
       steps {
         echo 'Build the app locally & run tests'
-        sh  "docker build -t eslamgomaa/dockerizing-ruby-drkiq:${env.BUILD_NUMBER} -f Dockerfile.production ."
+        sh  "docker build -t eslamgomaa/dockerizing-ruby-drkiq:${env.BUILD_NUMBER} --cache-from=eslamgomaa/dockerizing-ruby-drkiq:latest -f Dockerfile.production ."
       }
     }
     stage('Push') {
