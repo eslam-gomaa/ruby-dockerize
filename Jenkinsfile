@@ -39,7 +39,7 @@ pipeline {
     }
   }
   stages {
-    stage('Cloning Git Repo') { 
+    stage('Cloning the Git Repo') { 
       steps { 
         git branch: 'main',
             credentialsId: 'f0a87b6b-822e-4502-8051-47a170675cc3',
@@ -48,16 +48,15 @@ pipeline {
         sh 'ls -lh'
       }
     }
-    stage('Build') {
+    stage('Build the image') {
       steps {
         container('docker') {
           sh 'ls -lh'
-          echo 'Build the app locally & run tests'
           sh  "docker build -t eslamgomaa/dockerizing-ruby-drkiq:${env.BUILD_NUMBER} --cache-from=eslamgomaa/dockerizing-ruby-drkiq:latest -f Dockerfile.production ."
         }
       }
     }
-    stage('Push') {
+    stage('Push the image to Docker hub') {
       steps {
         container('docker') {
           script { 
