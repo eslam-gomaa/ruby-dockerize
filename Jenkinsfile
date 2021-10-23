@@ -43,7 +43,7 @@ pipeline {
     }
   }
   stages {
-    stage {
+    stage('Git pull') {
       git branch: 'main',
             credentialsId: 'f0a87b6b-822e-4502-8051-47a170675cc3',
             url: 'https://github.com/eslam-gomaa/ruby-dockerize.git'
