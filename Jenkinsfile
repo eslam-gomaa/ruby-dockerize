@@ -4,7 +4,7 @@ pipeline {
     registryCredential = 'docker_hub_id' 
     dockerImage = '' 
   }
-  agent { node { label 'debian-11-vm' } }
+  agent { node { label 'build-pod-staging' } }
   stages {
     stage('Cloning Git Repo') { 
       steps { 
@@ -32,7 +32,7 @@ pipeline {
     }
     stage('Deploy on Staging ENV') {
       steps {
-        node('kubernetes-staging') {
+        node('build-pod-staging') {
           sh 'ls k8s-app/'
         }
       }
