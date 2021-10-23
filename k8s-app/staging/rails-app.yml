@@ -18,7 +18,6 @@ spec:
         app: rails-app
         tier: frontend 
     spec:
-      serviceAccountName: jenkins
       initContainers:
       - name: wait-postgresql
         image: busybox
