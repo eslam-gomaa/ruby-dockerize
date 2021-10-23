@@ -4,14 +4,53 @@ pipeline {
     registryCredential = 'docker_hub_id' 
     dockerImage = '' 
   }
-  agent { node { label 'build-pod-staging' } }
+  // agent { node { label 'debian-11-vm' } }
+    agent {
+    kubernetes {
+      yaml '''
+      apiVersion: v1
+      kind: Pod
+      metadata:
+        name: cd
+        namespace: staging
+      spec:
+        containers:
+        - name: docker
+          image: docker:18.03-git
+          command: ["sleep"]
+          args: ["100000"]
+          volumeMounts:
+          - name: workspace
+            mountPath: /workspace
+          - name: docker-socket
+            mountPath: /var/run/docker.sock
+          workingDir: /workspace
+        - name: kubectl
+          image: vfarcic/kubectl
+          command: ["sleep"]
+          args: ["100000"]
+          volumeMounts:
+          - name: workspace
+            mountPath: /workspace
+          workingDir: /workspace
+        # serviceAccount: staging
+        volumes:
+        - name: docker-socket
+          hostPath:
+            path: /var/run/docker.sock
+            type: Socket
+        - name: workspace
+          emptyDir: {}
+        '''
+    }
   stages {
     stage('Cloning Git Repo') { 
       steps { 
-        git branch: 'main',
+        container('docker') {
+            git branch: 'main',
             credentialsId: 'f0a87b6b-822e-4502-8051-47a170675cc3',
             url: 'https://github.com/eslam-gomaa/ruby-dockerize.git'
-        // sh 'git clone https://github.com/eslam-gomaa/ruby-dockerize.git' 
+        }
       }
     }
     stage('Build & Test') {
