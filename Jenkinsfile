@@ -1,6 +1,6 @@
 pipeline {
   environment { 
-    registry = "https://registry.hub.docker.com/eslamgomaa/task" 
+    registry = "https://registry.hub.docker.com/eslamgomaa" 
     registryCredential = 'docker_hub_id' 
     dockerImage = '' 
   }
@@ -24,8 +24,8 @@ pipeline {
       steps {
         script { 
           docker.withRegistry( registry, registryCredential ) { 
-            docker.image("eslamgomaa/dockerizing-ruby-drkiq").push("${env.BUILD_NUMBER}")
-            docker.image("eslamgomaa/dockerizing-ruby-drkiq").push("latest")
+            docker.image("eslamgomaa/dockerizing-ruby-drkiq:${env.BUILD_NUMBER}").push("${env.BUILD_NUMBER}")
+            docker.image("eslamgomaa/dockerizing-ruby-drkiq:${env.BUILD_NUMBER}").push("latest")
             }
           }   
       }
