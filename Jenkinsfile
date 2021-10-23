@@ -29,14 +29,12 @@ pipeline {
             command: ["sleep"]
             args: ["100000"]
             tty: true
-
             workingDir: /workspace
           volumes:
           - name: docker-socket
             hostPath:
               path: /var/run/docker.sock
               type: Socket
-
         '''
     }
   }
@@ -74,11 +72,27 @@ pipeline {
     stage('Deploy on Staging namespace') {
       steps {
         container('kubectl') {
-          script { 
-            sh 'ls -lh'
-            sh 'pwd'
-            sh 'ls k8s-app/staging/'
-          }
+          sh 'kubectl apply -f k8s-app/staging/ -n staging'
+          // Waiting for the Pods to be initialized before running the tests
+          sh '''#!/bin/bash
+          while true
+          do
+            sleep 5
+              cmd=`kubectl get pod -n staging -l app=rails-app 2>/dev/null | grep -i running | wc -l`
+              if [ $cmd -eq '3' ];
+              then
+                  echo "All pods are RUNNING now."
+                  break
+              else
+                  echo "Waiting for all the pods to be created ..."
+              fi
+          done
+          '''
+          // Run a simple test
+          sh 'sleep 5'
+          sh "curl https://staging-app.demo.devops-caffe.com/ | grep 'The meaning of life'"
+          // To test it via the internal URL (Need to allow the host in the app)
+          // curl sample-rails-app.staging.svc.cluster.local:8010
         }
       }
     }
