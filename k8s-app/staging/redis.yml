@@ -17,6 +17,7 @@ spec:
         app: rails-app
         tier: redis 
     spec:
+      serviceAccountName: jenkins
       containers:
       - name: redis
         image: redis:5.0.7

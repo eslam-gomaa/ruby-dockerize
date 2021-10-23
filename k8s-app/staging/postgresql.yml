@@ -17,6 +17,7 @@ spec:
         app: rails-app
         tier: postgresql 
     spec:
+      serviceAccountName: jenkins
       containers:
       - name: postgres
         image: postgres:12.1
