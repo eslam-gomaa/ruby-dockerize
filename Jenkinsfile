@@ -14,7 +14,7 @@ pipeline {
         // sh 'git clone https://github.com/eslam-gomaa/ruby-dockerize.git' 
       }
     }
-    stage('Build') {
+    stage('Build & Test') {
       steps {
         echo 'Build the app locally & run tests'
         sh  "docker build -t eslamgomaa/dockerizing-ruby-drkiq:${env.BUILD_NUMBER} --cache-from=eslamgomaa/dockerizing-ruby-drkiq:latest -f Dockerfile.production ."
@@ -26,8 +26,15 @@ pipeline {
           docker.withRegistry( registry, registryCredential ) { 
             docker.image("eslamgomaa/dockerizing-ruby-drkiq:${env.BUILD_NUMBER}").push("${env.BUILD_NUMBER}")
             docker.image("eslamgomaa/dockerizing-ruby-drkiq:${env.BUILD_NUMBER}").push("latest")
-            }
-          }   
+          }
+        }   
+      }
+    }
+    stage('Deploy on Staging ENV') {
+      steps {
+        node('kubernetes-staging') {
+          sh 'ls k8s-app/'
+        }
       }
     }
   }
