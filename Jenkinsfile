@@ -11,7 +11,8 @@ pipeline {
         kind: Pod
         metadata:
           name: cd
-          // namespace: staging
+          label:
+            app: rails
         spec:
           containers:
           - name: docker
@@ -42,33 +43,35 @@ pipeline {
         '''
     }
   }
-  stages {
-    stage('Cloning Git Repo') { 
-      steps { 
-        git branch: 'main',
-            credentialsId: 'f0a87b6b-822e-4502-8051-47a170675cc3',
-            url: 'https://github.com/eslam-gomaa/ruby-dockerize.git'
-        sh 'hostname'
-        sh 'pwd'
-        sh 'ls -lh'
-      }
-    }
-    stage('Build') {
-      steps {
-        container('docker') {
+    node('rails') {
+    stages {
+      stage('Cloning Git Repo') { 
+        steps { 
+          git branch: 'main',
+              credentialsId: 'f0a87b6b-822e-4502-8051-47a170675cc3',
+              url: 'https://github.com/eslam-gomaa/ruby-dockerize.git'
+          sh 'hostname'
+          sh 'pwd'
           sh 'ls -lh'
-          echo 'Build the app locally & run tests'
-          sh  "docker build -t eslamgomaa/dockerizing-ruby-drkiq:${env.BUILD_NUMBER} --cache-from=eslamgomaa/dockerizing-ruby-drkiq:latest -f Dockerfile.production ."
         }
       }
-    }
-    stage('Push') {
-      steps {
-        container('docker') {
-          script { 
-            docker.withRegistry( registry, registryCredential ) { 
-              docker.image("eslamgomaa/dockerizing-ruby-drkiq:${env.BUILD_NUMBER}").push("${env.BUILD_NUMBER}")
-              docker.image("eslamgomaa/dockerizing-ruby-drkiq:${env.BUILD_NUMBER}").push("latest")
+      stage('Build') {
+        steps {
+          container('docker') {
+            sh 'ls -lh'
+            echo 'Build the app locally & run tests'
+            sh  "docker build -t eslamgomaa/dockerizing-ruby-drkiq:${env.BUILD_NUMBER} --cache-from=eslamgomaa/dockerizing-ruby-drkiq:latest -f Dockerfile.production ."
+          }
+        }
+      }
+      stage('Push') {
+        steps {
+          container('docker') {
+            script { 
+              docker.withRegistry( registry, registryCredential ) { 
+                docker.image("eslamgomaa/dockerizing-ruby-drkiq:${env.BUILD_NUMBER}").push("${env.BUILD_NUMBER}")
+                docker.image("eslamgomaa/dockerizing-ruby-drkiq:${env.BUILD_NUMBER}").push("latest")
+              }
             }
           }
         }
