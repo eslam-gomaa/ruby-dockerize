@@ -21,8 +21,6 @@ pipeline {
             args: ["100000"]
             tty: true
             volumeMounts:
-            // - name: workspace
-              // mountPath: /workspace
             - name: docker-socket
               mountPath: /var/run/docker.sock
             workingDir: /workspace
@@ -31,17 +29,14 @@ pipeline {
             command: ["sleep"]
             args: ["100000"]
             tty: true
-            // volumeMounts:
-            // - name: workspace
-              // mountPath: /workspace
+
             workingDir: /workspace
           volumes:
           - name: docker-socket
             hostPath:
               path: /var/run/docker.sock
               type: Socket
-          // - name: workspace
-            // emptyDir: {}
+
         '''
     }
   }
