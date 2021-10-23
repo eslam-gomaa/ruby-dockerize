@@ -11,7 +11,7 @@ pipeline {
         kind: Pod
         metadata:
           name: cd
-          namespace: staging
+          // namespace: staging
         spec:
           containers:
           - name: docker
@@ -32,7 +32,6 @@ pipeline {
             - name: workspace
               mountPath: /workspace
             workingDir: /workspace
-          # serviceAccount: staging
           volumes:
           - name: docker-socket
             hostPath:
@@ -45,6 +44,15 @@ pipeline {
   }
   stages {
     stage('Cloning Git Repo') {
+      steps {
+        container('docker') {
+          git branch: 'main',
+            credentialsId: 'f0a87b6b-822e-4502-8051-47a170675cc3',
+            url: 'https://github.com/eslam-gomaa/ruby-dockerize.git'
+        }
+      }
+    }
+    stage('Build') {
       steps {
         container('docker') {
           echo 'Build the app locally & run tests'
