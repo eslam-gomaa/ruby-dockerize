@@ -78,8 +78,8 @@ pipeline {
             sh  'docker-compose up -d'
             // Initialize DBs
             sh 'docker-compose run drkiq ls -lh /'
-            sh 'docker-compose run run drkiq pwd'       
-            sh 'docker-compose run run drkiq ls -lh'          
+            sh 'docker-compose run drkiq pwd'       
+            sh 'docker-compose run drkiq ls -lh'          
             sh  '''docker-compose run drkiq rake db:reset
                   docker-compose run drkiq rake db:migrate
                 '''
