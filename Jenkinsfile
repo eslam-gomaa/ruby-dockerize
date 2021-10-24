@@ -94,11 +94,8 @@ pipeline {
       }
     }
     stage('Deploy on Prod namespace') {
+      input("Ready to proceed?")
       steps {
-        input {
-          message "Deploy to stage?"
-          ok "Deploy"
-        }
         container('kubectl') {
           sh 'kubectl apply -f k8s-app/prod/ -n prod'
           // Waiting for the Pods to be initialized before running the tests
