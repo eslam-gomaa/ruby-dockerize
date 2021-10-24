@@ -101,7 +101,7 @@ pipeline {
         }
         container('curl') {
           echo 'Test the app URL'
-          sh 'http://localhost:8020 | grep The meaning of life'
+          sh 'curl http://localhost:8020 | grep The meaning of life'
         }
       }
     }
