@@ -31,6 +31,12 @@ pipeline {
             args: ["100000"]
             tty: true
             workingDir: /workspace
+          - name: curl
+            image: byrnedo/alpine-curl
+            command: ["sleep"]
+            args: ["100000"]
+            tty: true
+            workingDir: /workspace
           volumes:
           - name: docker-socket
             hostPath:
@@ -78,6 +84,9 @@ pipeline {
           sh './k8s-app/scripts/test-staging.sh'
           // Run a simple test
           sh 'sleep 5'
+
+        }
+        container('curl') {
           sh "curl https://staging-app.demo.devops-caffe.com/ | grep 'The meaning of life'"
           // To test it via the internal URL (Need to allow the host in the app)
           // curl sample-rails-app.staging.svc.cluster.local:8010
