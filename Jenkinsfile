@@ -77,7 +77,7 @@ pipeline {
             sh 'cp env-example .env'
             sh  'docker-compose up -d'
             // Initialize DBs
-            sh 'ls -lh'
+            sh 'docker-compose run drkiq ls -lh'
             sh  '''docker-compose run drkiq rake db:reset
                   docker-compose run drkiq rake db:migrate
                 '''
