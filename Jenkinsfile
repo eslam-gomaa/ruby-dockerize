@@ -96,14 +96,13 @@ pipeline {
     stage('Deploy on Prod namespace') {
       steps {
         container('kubectl') {
-          input("Ready to proceed?")
+          input("Deploy on Prod ?")
           sh 'kubectl apply -f k8s-app/prod/ -n prod'
           // Waiting for the Pods to be initialized before running the tests
           sh 'chmod +x k8s-app/scripts/test-staging.sh'
           sh './k8s-app/scripts/test-prod.sh'
           // Run a simple test
           sh 'sleep 5'
-
         }
         container('curl') {
           sh "curl https://prod-app.demo.devops-caffe.com/ | grep 'The meaning of life'"
