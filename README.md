@@ -46,15 +46,19 @@ Where the images are pushed: [Docker hub](https://hub.docker.com/repository/dock
 
 ## Usage
 
-Since this is a .. pipeline, Trigger the pipeline manually
+Since this is a "Proof of concept" pipeline, Trigger the pipeline manually
+
+![image](https://user-images.githubusercontent.com/33789516/138599656-de90263b-37e7-493c-b4f6-5715ffd7f251.png)
 
 
 
-<details>
+
+
+<!-- <details>
     <summary>
         <b style="font-size:20px" >Pipeline screenshoots
 </b>
-    </summary>
+    </summary> -->
 
     
   
