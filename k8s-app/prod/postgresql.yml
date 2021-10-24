@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgresql
+  labels:
+    app: rails-app
+    tier: postgresql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rails-app
+      tier: postgresql
+  template:
+    metadata:
+      labels:
+        app: rails-app
+        tier: postgresql 
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:12.1
+        ports:
+            - containerPort: 5432
+        env:
+            - name: POSTGRES_DB
+              value: db0
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
+
+            - name: POSTGRES_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: sample-rails-app
+                  key: POSTGRES_USER
+
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: sample-rails-app
+                  key: POSTGRES_PASSWORD
+
+        volumeMounts:
+            - name: "postgresql-data"
+              mountPath: "/var/lib/postgresql/data"
+      volumes:
+        - name: postgresql-data
+          persistentVolumeClaim:
+            claimName: claim-postgresql
+---
+
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: claim-postgresql
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+  storageClassName: nfs-client
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgresql
+spec:
+  selector:
+    app: rails-app
+    tier: postgresql
+  ports:
+    - protocol: TCP
+      port: 5432 # service port
+      targetPort: 5432 # Pod port

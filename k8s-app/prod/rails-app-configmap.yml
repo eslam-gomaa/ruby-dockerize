@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sample-rails-app
+data:
+  POSTGRES_USER: drkiq
+  POSTGRES_PASSWORD: test_db_password # Should be in a secret
+
+  USER_ID: "1001"
+  GROUP_ID: "1001"
+  SECRET_TOKEN: "Wa4Kdu6hMt3tYKm4jb9p4vZUuc7jBVFw" # Should be in a secret
+  WORKER_PROCESSES: "1"
+  LISTEN_ON: "0.0.0.0:8010"
+  DATABASE_URL: "postgresql://drkiq:test_db_password@postgresql:5432/drkiq?encoding=utf8&pool=5&timeout=5000"
+  # DATABASE_URL: "postgresql://$POSTGRES_USER:$POSTGRES_PASSWORD@postgresql:5432/drkiq?encoding=utf8&pool=5&timeout=5000"
+  CACHE_URL: redis://redis:6379/0
+  JOB_WORKER_URL: redis://redis:6379/0
