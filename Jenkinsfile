@@ -14,6 +14,7 @@ pipeline {
           label:
             app: rails
         spec:
+          serviceAccountName: staging-prod-create
           containers:
           - name: docker
             image: docker:18.03-git
