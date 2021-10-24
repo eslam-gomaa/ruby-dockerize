@@ -40,7 +40,7 @@ Jenkins URL: https://jenkins.demo.devops-caffe.com/jenkins/
 >
 > password
 
-Where the images are pushed: [Docker hub](https://hub.docker.com/repository/docker/eslamgomaa/dockerizing-ruby-drkiq)
+Where the images are pushed: [Docker hub](https://hub.docker.com/r/eslamgomaa/dockerizing-ruby-drkiq)
 
 ---
 
