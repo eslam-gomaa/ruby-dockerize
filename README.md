@@ -44,6 +44,11 @@ Where the images are pushed: [Docker hub](https://hub.docker.com/repository/dock
 
 ---
 
+## Usage
+
+Since this is a .. pipeline, Trigger the pipeline manually
+
+
 
 <details>
     <summary>
