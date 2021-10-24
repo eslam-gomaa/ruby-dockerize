@@ -97,10 +97,10 @@ pipeline {
             sh 'docker-compose run drkiq rails test'
           }
         }
-        container('curl') {
-          echo 'Test the app URL'
-          sh 'curl http://localhost:8020 | grep The meaning of life'
-        }
+        // container('curl') {
+        //   echo 'Test the app URL'
+        //   sh 'curl http://localhost:8020 | grep The meaning of life'
+        // }
         container('docker-compose') {
           // Run Docker-compose down
           sh 'docker-compose down --volumes'
