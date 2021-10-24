@@ -74,20 +74,8 @@ pipeline {
         container('kubectl') {
           sh 'kubectl apply -f k8s-app/staging/ -n staging'
           // Waiting for the Pods to be initialized before running the tests
-          sh '''#!/bin/sh
-          while true
-          do
-            sleep 5
-              cmd=`kubectl get pod -n staging -l app=rails-app 2>/dev/null | grep -i running | wc -l`
-              if [ $cmd -eq '3' ];
-              then
-                  echo "All pods are RUNNING now."
-                  break
-              else
-                  echo "Waiting for all the pods to be created ..."
-              fi
-          done
-          '''
+          sh 'chmod +x k8s-app/scripts/test-staging.sh'
+          sh './k8s-app/scripts/test-staging.sh'
           // Run a simple test
           sh 'sleep 5'
           sh "curl https://staging-app.demo.devops-caffe.com/ | grep 'The meaning of life'"
