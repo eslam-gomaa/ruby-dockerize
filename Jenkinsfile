@@ -67,33 +67,35 @@ pipeline {
     stage('Development build with Docker-compose') {
       steps {
         container('docker-compose') {
-          sh 'ls -lh'
-          // Create docker volumes
-          sh  '''docker volume create --name drkiq-postgres
-                 docker volume create --name drkiq-redis
-              '''
-          // Run docker-compose up
-          sh  '''cp env-example .env
-                 docker-compose up -d
-              '''
-          // Initialize DBs
-          sh  '''docker-compose run drkiq rake db:reset
-                 docker-compose run drkiq rake db:migrate
-              '''
-          // Run Docker-compose down
-          sh 'docker-compose up -d'          
-          // Install prerequisits
-          sh  '''docker-compose run --user "$(id -u):$(id -g)" drkiq rails webpacker:install
-                 docker-compose run --user "$(id -u):$(id -g)" drkiq rails assets:precompile
-              '''
-          // Create DBs
-          sh  '''docker-compose run drkiq bundle exec rake db:create test
-                 docker-compose run drkiq bundle exec rake db:create development || echo 'development DB exists'
-              '''
-          // Run Unit tests
-          sh 'docker-compose run drkiq rails test'
-          // Run Docker-compose down
-          sh 'docker-compose down --volumes'
+          script {
+            sh 'ls -lh'
+            // Create docker volumes
+            sh  '''docker volume create --name drkiq-postgres
+                  docker volume create --name drkiq-redis
+                '''
+            // Run docker-compose up
+            sh 'cp env-example .env'
+            sh  'docker-compose up -d'
+            // Initialize DBs
+            sh 'ls -lh'
+            sh  '''docker-compose run drkiq rake db:reset
+                  docker-compose run drkiq rake db:migrate
+                '''
+            // Run Docker-compose down
+            sh 'docker-compose up -d'          
+            // Install prerequisits
+            sh  '''docker-compose run --user "$(id -u):$(id -g)" drkiq rails webpacker:install
+                  docker-compose run --user "$(id -u):$(id -g)" drkiq rails assets:precompile
+                '''
+            // Create DBs
+            sh  '''docker-compose run drkiq bundle exec rake db:create test
+                  docker-compose run drkiq bundle exec rake db:create development || echo 'development DB exists'
+                '''
+            // Run Unit tests
+            sh 'docker-compose run drkiq rails test'
+            // Run Docker-compose down
+            sh 'docker-compose down --volumes'
+          }
         }
       }
     }
