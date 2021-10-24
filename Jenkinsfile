@@ -64,7 +64,7 @@ pipeline {
         sh 'ls -lh'
       }
     }
-    stage('Development build with Docker-compose') {
+    stage('Development build & Unit tests') {
       steps {
         container('docker-compose') {
           script {
