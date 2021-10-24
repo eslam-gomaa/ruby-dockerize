@@ -74,7 +74,7 @@ pipeline {
         container('kubectl') {
           sh 'kubectl apply -f k8s-app/staging/ -n staging'
           // Waiting for the Pods to be initialized before running the tests
-          sh '''#!/bin/bash
+          sh '''#!/bin/sh
           while true
           do
             sleep 5
