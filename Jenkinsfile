@@ -96,7 +96,8 @@ pipeline {
     stage('Deploy on Prod namespace') {
       steps {
         input {
-          message "Deploy to Prod ?"
+          message "Deploy to stage?"
+          ok "Deploy"
         }
         container('kubectl') {
           sh 'kubectl apply -f k8s-app/prod/ -n prod'
