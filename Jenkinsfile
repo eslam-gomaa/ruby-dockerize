@@ -30,6 +30,9 @@ pipeline {
             command: ["sleep"]
             args: ["100000"]
             tty: true
+            volumeMounts:
+            - name: docker-socket
+              mountPath: /var/run/docker.sock
             workingDir: /workspace
           - name: kubectl 
             image: vfarcic/kubectl
