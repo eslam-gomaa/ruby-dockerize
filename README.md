@@ -7,7 +7,7 @@ This is a demo Jenkins Pipeline for a containerized ruby on rails app, & **inclu
   2. Build the prod docker image
   3. Push the image to docker hub
   4. Deploy the app to the staging ENV (staging namespace)
-  5. Deploy the app to the prod ENV (prod namespace)
+  5. Deploy the app to the prod ENV (prod namespace) "***Asks for confirmation***"
 
 
 ---
@@ -49,6 +49,10 @@ Where the images are pushed: [Docker hub](https://hub.docker.com/repository/dock
 Since this is a "Proof of concept" pipeline, Trigger the pipeline manually
 
 ![image](https://user-images.githubusercontent.com/33789516/138599656-de90263b-37e7-493c-b4f6-5715ffd7f251.png)
+
+![image](https://user-images.githubusercontent.com/33789516/138600626-f634acb6-7266-4690-8e8d-39076fe89fe2.png)
+
+![image](https://user-images.githubusercontent.com/33789516/138600632-a82a0c72-ac40-4dd1-afb2-7ef63caa14bd.png)
 
 
 
