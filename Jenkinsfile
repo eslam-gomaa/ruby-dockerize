@@ -93,11 +93,15 @@ pipeline {
             sh  '''docker-compose run drkiq bundle exec rake db:create test
                   docker-compose run drkiq bundle exec rake db:create development || echo 'development DB exists'
                 '''
-            // Run Unit tests
+            echo 'Run Unit tests'
             sh 'docker-compose run drkiq rails test'
             // Run Docker-compose down
             sh 'docker-compose down --volumes'
           }
+        }
+        container('curl') {
+          echo 'Test the app URL'
+          sh 'http://localhost:8020 | grep The meaning of life'
         }
       }
     }
