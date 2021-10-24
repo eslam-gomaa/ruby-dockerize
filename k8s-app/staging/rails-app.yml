@@ -24,7 +24,7 @@ spec:
         command: ['sh', '-c', 'until nslookup postgresql; do echo waiting for postgresql; sleep 2; done;']
         
       - name: copy-data
-        image: eslamgomaa/dockerizing-ruby-drkiq:33
+        image: eslamgomaa/dockerizing-ruby-drkiq:latest
         workingDir: /opt/app-data
         volumeMounts:
             - name: "rails-data"
@@ -38,7 +38,7 @@ spec:
            echo "Data copied successfully.";
 
       - name: init-db
-        image: eslamgomaa/dockerizing-ruby-drkiq:33
+        image: eslamgomaa/dockerizing-ruby-drkiq:latest
         workingDir: /opt/app-data
         volumeMounts:
             - name: "rails-data"
@@ -102,7 +102,7 @@ spec:
                   key: JOB_WORKER_URL
       containers:
       - name: drkiq
-        image: eslamgomaa/dockerizing-ruby-drkiq:33
+        image: eslamgomaa/dockerizing-ruby-drkiq:latest
         imagePullPolicy: Always
         ports:
             - containerPort: 8010
