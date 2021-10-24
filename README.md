@@ -48,6 +48,8 @@ Where the images are pushed: [Docker hub](https://hub.docker.com/r/eslamgomaa/do
 
 Since this is a "Proof of concept" pipeline, Trigger the pipeline manually
 
+NOTE -- Github & Docker hub Credentials are removed from Jenkins
+
 ![image](https://user-images.githubusercontent.com/33789516/138599656-de90263b-37e7-493c-b4f6-5715ffd7f251.png)
 
 ![image](https://user-images.githubusercontent.com/33789516/138600626-f634acb6-7266-4690-8e8d-39076fe89fe2.png)
