@@ -95,13 +95,15 @@ pipeline {
                 '''
             echo 'Run Unit tests'
             sh 'docker-compose run drkiq rails test'
-            // Run Docker-compose down
-            sh 'docker-compose down --volumes'
           }
         }
         container('curl') {
           echo 'Test the app URL'
           sh 'curl http://localhost:8020 | grep The meaning of life'
+        }
+        container('docker-compose') {
+          // Run Docker-compose down
+          sh 'docker-compose down --volumes'
         }
       }
     }
